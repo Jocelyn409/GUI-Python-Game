@@ -1,8 +1,6 @@
 from tkinter import *
-#import binascii
 import string
 import random
-
 
 window = Tk()
 window.minsize(width=1000, height=700)
@@ -15,16 +13,22 @@ def randomize(): # add options somewhere to choose what is in the random charact
     global randomCharacter
     randomCharacter = random.choice(string.printable)
 
+# Gets bit string representation of a string (or in this case a character)
 def convertToBinary(character):
     return bin(int.from_bytes(character.encode(), 'big'))[2:]
 
 def showPath():
+
+    # Path strings
     start = "+"
-    destination = "@"
+    destinationUp = "\n@\n*"
+    destinationRight = "*******@           "
     upFull = "*\n*\n*"
     upRight = "\n           ********\n*"
     rightFull = "*****************"
     rightUp = "*\n*********            \n"
+
+    # Positions for strings to be placed
     rowPos = 7
     columnPos = 0
 
@@ -35,41 +39,48 @@ def showPath():
                            highlightbackground="#444444", highlightthickness="1")
             square.grid(row=row, column=column)
 
+    # Create starting point
     startingPoint = Label(gridFrame, text=start, bg="#222222",
                           fg="white", font=(25)).grid(row=rowPos, column=columnPos)
 
     randomize()
     binary = convertToBinary(randomCharacter)
-    length = len(binary)
+    length = len(binary) # Get length of bit string
     stringCounter = 0
     direction = ""
-    print(binary)
-    print(randomCharacter)
+    #print(binary)
+    #print(randomCharacter)
+
+    # Print out pathway
     for n in binary:
-        if length != stringCounter+1:
+        if length != stringCounter+1: # Need to make sure we aren't at the end of the string
             if n == "1": # 1 means go right
                 columnPos += 1
-                if binary[stringCounter+1] == "1": # Next position is to the right
+                if binary[stringCounter+1] == "1": # Next position is going right
                     direction = rightFull
-                elif binary[stringCounter+1] == "0": # Next position is up
+                elif binary[stringCounter+1] == "0": # Next position is going up
                     direction = rightUp
                 labelDirection = Label(gridFrame, text=direction, bg="#222222", fg="white",
                                  font=(25)).grid(row=rowPos, column=columnPos)
             elif n == "0": # 0 means go up
                 rowPos -= 1
-                if binary[stringCounter+1] == "0": # Next position is up
+                if binary[stringCounter+1] == "0": # Next position is going up
                     direction = upFull
-                elif binary[stringCounter+1] == "1": # Next position is to the right
+                elif binary[stringCounter+1] == "1": # Next position is going right
                     direction = upRight
                 labelDirection = Label(gridFrame, text=direction, bg="#222222", fg="white",
                                  font=(25)).grid(row=rowPos, column=columnPos)
             stringCounter += 1
+
     # Last update of positions wasn't calculated in for loop; it is done below
     if binary[stringCounter] == "1":
         columnPos += 1
+        direction = destinationRight
     elif binary[stringCounter] == "0":
         rowPos -= 1
-    final = Label(gridFrame, text=destination, bg="#222222", fg="white",
+        direction = destinationUp
+
+    final = Label(gridFrame, text=direction, bg="#222222", fg="white",
                   font=(25)).grid(row=rowPos, column=columnPos)
 
 
@@ -114,5 +125,4 @@ submitButton.pack(side=BOTTOM)
 input.pack(side=BOTTOM)
 labelAnswer.pack(side=BOTTOM)
 
-window.configure()
 window.mainloop()
