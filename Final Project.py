@@ -9,7 +9,7 @@ window.title("Bit Guesser")
 
 randomCharacter = ''
 
-def randomize(): # add options somewhere to choose what is in the random character list??? new button??
+def randomize():
     global randomCharacter
     randomCharacter = random.choice(string.printable)
 
@@ -32,7 +32,7 @@ def showPath():
     rowPos = 7
     columnPos = 0
 
-    # Create new 8x8 grid every time. This is so we can clear the entire gridFrame when resetting.
+    # Create new 8x8 grid every time. This is so we can clear the entire gridFrame when resetting the frame.
     for row in range(8):
         for column in range(8):
             square = Frame(master=gridFrame, width=110, height=70, bg="#222222",
@@ -48,8 +48,13 @@ def showPath():
     length = len(binary) # Get length of bit string
     stringCounter = 0
     direction = ""
-    #print(binary)
-    #print(randomCharacter)
+
+    if length < 7: # Adds some more variety to the path
+        binary = "0" + binary
+        length = length + 1
+
+    print(randomCharacter)
+    print(binary)
 
     # Print out pathway
     for n in binary:
@@ -83,11 +88,14 @@ def showPath():
     final = Label(gridFrame, text=direction, bg="#222222", fg="white",
                   font=(25)).grid(row=rowPos, column=columnPos)
 
+    # Add bitstring to top right of grid.
+    #bitString = Label(gridFrame, text=binary, bg="#222222", fg="white", font=(25)).grid(row=0, column=7)
+
 
 def pressReset():
     randomize()
     input.delete(0, END) # Reset input
-    labelAnswer.config(text="")
+    labelAnswer.config(text="") # Resets answer text
     showPath()
 
 # Function will
@@ -96,7 +104,7 @@ def pressEnter():
 
     input.delete(1, END) # Deletes all but first character
     if input.get() == "":
-        labelAnswer.config(text="¯\_(ツ)_/¯")
+        labelAnswer.config(text="Enter a character")
     elif input.get() == randomCharacter:
         labelAnswer.config(text="Correct answer")
     else:
