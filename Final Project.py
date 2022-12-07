@@ -53,8 +53,8 @@ def showPath():
         binary = "0" + binary
         length = length + 1
 
-    print(randomCharacter)
-    print(binary)
+    #print(randomCharacter)
+    #print(binary)
 
     # Print out pathway
     for n in binary:
@@ -98,7 +98,7 @@ def pressReset():
     labelAnswer.config(text="") # Resets answer text
     showPath()
 
-# Function will
+
 def pressEnter():
     global randomCharacter
 
@@ -119,7 +119,7 @@ inputFrame.pack_propagate(False)
 inputFrame.pack(fill=X)
 gridFrame = LabelFrame(master=backgroundFrame, width=750, height=600, bg="#222222")
 gridFrame.pack_propagate(0)
-gridFrame.pack(padx=20,pady=20)
+gridFrame.pack(padx=20, pady=20)
 
 showPath()
 
